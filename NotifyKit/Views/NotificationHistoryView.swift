@@ -69,7 +69,7 @@ struct NotificationHistoryView: View {
                     ForEach(notificationManager.pendingNotifications, id: \.identifier) { request in
                         NotificationRow(
                             title: request.content.title,
-                            body: request.content.body,
+                            message: request.content.body,
                             subtitle: request.content.subtitle,
                             identifier: request.identifier,
                             trigger: describeTrigger(request.trigger)
@@ -94,7 +94,7 @@ struct NotificationHistoryView: View {
                     ForEach(notificationManager.deliveredNotifications, id: \.request.identifier) { notification in
                         NotificationRow(
                             title: notification.request.content.title,
-                            body: notification.request.content.body,
+                            message: notification.request.content.body,
                             subtitle: notification.request.content.subtitle,
                             identifier: notification.request.identifier,
                             trigger: "Delivered \(formatDate(notification.date))"
@@ -175,7 +175,7 @@ struct NotificationHistoryView: View {
 
 struct NotificationRow: View {
     let title: String
-    let body: String
+    let message: String
     let subtitle: String
     let identifier: String
     let trigger: String
@@ -191,7 +191,7 @@ struct NotificationRow: View {
                     .foregroundColor(.secondary)
             }
 
-            Text(body)
+            Text(message)
                 .font(.body)
                 .foregroundColor(.secondary)
                 .lineLimit(2)
