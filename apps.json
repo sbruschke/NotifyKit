@@ -1,15 +1,7 @@
 {
   "name": "NotifyKit Source",
   "identifier": "com.notifykit.source",
-  "subtitle": "Custom notification app for Shortcuts",
-  "description": "A source for NotifyKit - an iOS app that integrates with Shortcuts to send fully customizable notifications.",
-  "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/icon.png",
-  "headerURL": "",
-  "website": "https://github.com/sbruschke/NotifyKit",
-  "tintColor": "#3962FB",
-  "featuredApps": [
-    "com.notifykit.app"
-  ],
+  "sourceURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/apps.json",
   "apps": [
     {
       "name": "NotifyKit",
@@ -17,10 +9,7 @@
       "developerName": "NotifyKit",
       "subtitle": "Custom notifications via Shortcuts",
       "localizedDescription": "NotifyKit integrates with iOS Shortcuts to let you send fully customizable notifications.\n\nFeatures:\n• Full text customization (title, subtitle, body)\n• Badge number control\n• Multiple sound options\n• Image attachments from URLs\n• Thread grouping\n• Interruption levels (Passive, Active, Time Sensitive)\n• Action buttons (Reply, Snooze, Mark Read)\n• Schedule notifications for later\n• Cancel pending notifications\n\nShortcuts Actions:\n• Send Notification\n• Schedule Notification\n• Send Notification After Delay\n• Cancel Notification\n• Cancel All Notifications\n• Set/Clear App Badge\n• Get Pending Count",
-      "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/icon.png",
       "tintColor": "#3962FB",
-      "category": "utilities",
-      "screenshots": [],
       "versions": [
         {
           "version": "2026.01.28",
@@ -32,7 +21,6 @@
         }
       ],
       "appPermissions": {
-        "entitlements": [],
         "privacy": [
           {
             "name": "UserNotifications",
@@ -41,6 +29,5 @@
         ]
       }
     }
-  ],
-  "news": []
+  ]
 }
