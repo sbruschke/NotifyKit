@@ -48,10 +48,32 @@ jobs:
 
     - name: Create IPA
       run: |
+        # Debug: Show archive structure
+        echo "Archive structure:"
+        find build/NotifyKit.xcarchive -name "*.app" -type d 2>/dev/null || true
+
+        # Find the .app bundle
+        APP_PATH=$(find build/NotifyKit.xcarchive -name "*.app" -type d | head -1)
+
+        if [ -z "$APP_PATH" ]; then
+          echo "Error: Could not find .app in archive"
+          exit 1
+        fi
+
+        echo "Found app at: $APP_PATH"
+
+        # Create Payload structure
         mkdir -p build/Payload
-        cp -r build/NotifyKit.xcarchive/Products/Applications/NotifyKit.app build/Payload/
+        cp -r "$APP_PATH" build/Payload/
+
+        # Create IPA (zip with Payload at root)
         cd build
         zip -r NotifyKit.ipa Payload
+
+        # Verify IPA structure
+        echo "IPA contents:"
+        unzip -l NotifyKit.ipa | head -20
+
         rm -rf Payload
 
     - name: Upload IPA Artifact
