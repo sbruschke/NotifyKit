@@ -14,7 +14,7 @@
         {
           "version": "2026.01.28",
           "date": "2026-01-28",
-          "size": 136808,
+          "size": 136795,
           "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
           "localizedDescription": "Initial release with full notification customization and Shortcuts integration.",
           "minOSVersion": "16.0"
