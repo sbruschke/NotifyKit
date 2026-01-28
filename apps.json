@@ -1,13 +1,16 @@
 {
-  "name": "NotifyKit",
-  "identifier": "com.notifykit.source",
+  "name": "New Notif!",
+  "identifier": "com.newnotif.source",
+  "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
+  "headerURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/HeaderImage.png",
   "apps": [
     {
-      "name": "NotifyKit",
-      "bundleIdentifier": "com.notifykit.app",
+      "name": "New Notif!",
+      "bundleIdentifier": "com.newnotif.app",
       "developerName": "sbruschke",
       "subtitle": "Custom notifications via Shortcuts",
       "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
+      "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
       "tintColor": "3962FB",
       "versions": [
         {
@@ -15,7 +18,7 @@
           "date": "2026-01-28",
           "size": 136816,
           "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
-          "localizedDescription": "Latest build with notification customization and Shortcuts integration."
+          "localizedDescription": "Initial release with full notification customization and Shortcuts integration."
         }
       ]
     }

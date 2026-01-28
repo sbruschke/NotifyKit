@@ -94,31 +94,39 @@ jobs:
         SIZE="${{ steps.create_ipa.outputs.ipa_size }}"
 
         # Generate clean SideStore-compatible apps.json
-        cat > apps.json << EOF
+        cat > apps.json << 'EOF'
+{
+  "name": "New Notif!",
+  "identifier": "com.newnotif.source",
+  "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
+  "headerURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/HeaderImage.png",
+  "apps": [
+    {
+      "name": "New Notif!",
+      "bundleIdentifier": "com.newnotif.app",
+      "developerName": "sbruschke",
+      "subtitle": "Custom notifications via Shortcuts",
+      "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
+      "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
+      "tintColor": "3962FB",
+      "versions": [
         {
-          "name": "NotifyKit",
-          "identifier": "com.notifykit.source",
-          "apps": [
-            {
-              "name": "NotifyKit",
-              "bundleIdentifier": "com.notifykit.app",
-              "developerName": "sbruschke",
-              "subtitle": "Custom notifications via Shortcuts",
-              "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
-              "tintColor": "3962FB",
-              "versions": [
-                {
-                  "version": "${VERSION}",
-                  "date": "${DATE}",
-                  "size": ${SIZE},
-                  "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
-                  "localizedDescription": "Latest build with notification customization and Shortcuts integration."
-                }
-              ]
-            }
-          ]
+          "version": "VERSION_PLACEHOLDER",
+          "date": "DATE_PLACEHOLDER",
+          "size": SIZE_PLACEHOLDER,
+          "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
+          "localizedDescription": "Latest build with notification customization and Shortcuts integration."
         }
-        EOF
+      ]
+    }
+  ]
+}
+EOF
+
+        # Replace placeholders with actual values
+        sed -i "s/VERSION_PLACEHOLDER/${VERSION}/g" apps.json
+        sed -i "s/DATE_PLACEHOLDER/${DATE}/g" apps.json
+        sed -i "s/SIZE_PLACEHOLDER/${SIZE}/g" apps.json
 
         cat apps.json
 
@@ -142,8 +150,8 @@ jobs:
 
         # Create new release
         gh release create latest \
-          --title "NotifyKit Latest" \
-          --notes "## NotifyKit
+          --title "New Notif! Latest" \
+          --notes "## New Notif!
 
         **Version:** ${{ steps.version.outputs.version }}
         **Build:** ${{ steps.version.outputs.build }}
