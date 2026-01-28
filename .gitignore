@@ -1,0 +1,173 @@
+# =============================================================================
+# SENSITIVE DATA & CREDENTIALS - NEVER COMMIT
+# =============================================================================
+
+# Signing certificates and provisioning profiles
+*.p12
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# Keychain files
+*.keychain
+*.keychain-db
+
+# Private keys
+*.pem
+*.key
+*.p8
+
+# Environment and secrets files
+.env
+.env.*
+*.env
+secrets.json
+secrets.plist
+Secrets.swift
+**/Secrets/
+credentials.json
+config.secret.*
+
+# API keys configuration (create from template)
+APIKeys.swift
+Keys.swift
+
+# App Store Connect API keys
+AuthKey_*.p8
+
+# =============================================================================
+# XCODE USER DATA - Personal settings, not for sharing
+# =============================================================================
+
+# User-specific Xcode settings
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad
+
+# Xcode workspace settings (contains personal preferences)
+*.xcworkspace/xcuserdata/
+*.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# User interface state
+*.perspectivev3
+*.mode1v3
+*.mode2v3
+
+# =============================================================================
+# BUILD ARTIFACTS - Generated files, rebuild locally
+# =============================================================================
+
+# Derived data (build output)
+DerivedData/
+build/
+Build/
+
+# Compiled outputs
+*.o
+*.a
+*.dylib
+*.framework
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+Packages/
+
+# CocoaPods (if used)
+Pods/
+Podfile.lock
+
+# Carthage (if used)
+Carthage/Build/
+Carthage/Checkouts/
+
+# =============================================================================
+# SYSTEM FILES - OS-generated junk
+# =============================================================================
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*.swp
+*~
+
+# Windows (in case of cross-platform editing)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+.directory
+
+# =============================================================================
+# IDE AND EDITOR FILES
+# =============================================================================
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+*.xccheckout
+*.xcscmblueprint
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (AppCode)
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+Session.vim
+
+# =============================================================================
+# TESTING AND DEBUGGING
+# =============================================================================
+
+# Code coverage
+*.gcno
+*.gcda
+coverage/
+*.lcov
+
+# Test results
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Crash logs
+*.crash
+*.ips
+
+# =============================================================================
+# MISC
+# =============================================================================
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Archives (too large for git)
+*.xcarchive
+
+# Fastlane sensitive files
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/Appfile
+fastlane/Deliverfile
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
