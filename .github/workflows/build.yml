@@ -5,11 +5,11 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-14  # Uses macOS with Xcode 15+
+    runs-on: macos-14
 
     steps:
     - name: Checkout repository
@@ -20,6 +20,16 @@ jobs:
 
     - name: Show Xcode version
       run: xcodebuild -version
+
+    - name: Get version info
+      id: version
+      run: |
+        # Extract version from Info.plist or use date-based version
+        VERSION=$(date +"%Y.%m.%d")
+        BUILD_NUMBER=${{ github.run_number }}
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "build=${BUILD_NUMBER}" >> $GITHUB_OUTPUT
+        echo "tag=v${VERSION}-${BUILD_NUMBER}" >> $GITHUB_OUTPUT
 
     - name: Build for iOS Simulator (Debug)
       run: |
@@ -47,11 +57,8 @@ jobs:
           AD_HOC_CODE_SIGNING_ALLOWED=YES
 
     - name: Create IPA
+      id: create_ipa
       run: |
-        # Debug: Show archive structure
-        echo "Archive structure:"
-        find build/NotifyKit.xcarchive -name "*.app" -type d 2>/dev/null || true
-
         # Find the .app bundle
         APP_PATH=$(find build/NotifyKit.xcarchive -name "*.app" -type d | head -1)
 
@@ -66,15 +73,34 @@ jobs:
         mkdir -p build/Payload
         cp -r "$APP_PATH" build/Payload/
 
-        # Create IPA (zip with Payload at root)
+        # Create IPA
         cd build
         zip -r NotifyKit.ipa Payload
 
-        # Verify IPA structure
-        echo "IPA contents:"
-        unzip -l NotifyKit.ipa | head -20
+        # Get file size
+        IPA_SIZE=$(stat -f%z NotifyKit.ipa)
+        echo "ipa_size=${IPA_SIZE}" >> $GITHUB_OUTPUT
 
         rm -rf Payload
+
+    - name: Update apps.json
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        # Update the apps.json with new version info
+        DATE=$(date +"%Y-%m-%d")
+        VERSION="${{ steps.version.outputs.version }}"
+        SIZE="${{ steps.create_ipa.outputs.ipa_size }}"
+
+        # Use jq to update the JSON
+        jq --arg version "$VERSION" \
+           --arg date "$DATE" \
+           --argjson size "$SIZE" \
+           '.apps[0].versions[0].version = $version |
+            .apps[0].versions[0].date = $date |
+            .apps[0].versions[0].size = $size' \
+           apps.json > apps.json.tmp && mv apps.json.tmp apps.json
+
+        cat apps.json
 
     - name: Upload IPA Artifact
       uses: actions/upload-artifact@v4
@@ -83,9 +109,41 @@ jobs:
         path: build/NotifyKit.ipa
         retention-days: 30
 
-    - name: Upload Archive (for debugging)
-      uses: actions/upload-artifact@v4
+    - name: Create or Update Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
       with:
-        name: NotifyKit-Archive
-        path: build/NotifyKit.xcarchive
-        retention-days: 7
+        tag_name: latest
+        name: NotifyKit Latest
+        body: |
+          ## NotifyKit
+
+          **Version:** ${{ steps.version.outputs.version }}
+          **Build:** ${{ steps.version.outputs.build }}
+
+          ### Installation
+
+          **Option 1: Add SideStore/AltStore Source**
+          ```
+          https://raw.githubusercontent.com/sbruschke/NotifyKit/main/apps.json
+          ```
+
+          **Option 2: Direct Download**
+          Download `NotifyKit.ipa` below and sideload with AltStore/SideStore/Sideloadly.
+
+          ### Changes
+          - Latest build from main branch
+        files: build/NotifyKit.ipa
+        prerelease: false
+        make_latest: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Commit updated apps.json
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add apps.json
+        git diff --staged --quiet || git commit -m "Update apps.json for version ${{ steps.version.outputs.version }}"
+        git push || echo "Nothing to push"
