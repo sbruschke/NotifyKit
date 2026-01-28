@@ -7,7 +7,7 @@
       "bundleIdentifier": "com.notifykit.app",
       "developerName": "sbruschke",
       "subtitle": "Custom notifications via Shortcuts",
-      "localizedDescription": "Send fully customizable notifications through iOS Shortcuts.",
+      "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
       "tintColor": "3962FB",
       "versions": [
         {
@@ -15,7 +15,7 @@
           "date": "2026-01-28",
           "size": 136795,
           "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
-          "localizedDescription": "Initial release."
+          "localizedDescription": "Latest build with notification customization and Shortcuts integration."
         }
       ]
     }

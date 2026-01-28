@@ -89,19 +89,36 @@ jobs:
     - name: Update apps.json
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       run: |
-        # Update the apps.json with new version info
         DATE=$(date +"%Y-%m-%d")
         VERSION="${{ steps.version.outputs.version }}"
         SIZE="${{ steps.create_ipa.outputs.ipa_size }}"
 
-        # Use jq to update the JSON
-        jq --arg version "$VERSION" \
-           --arg date "$DATE" \
-           --argjson size "$SIZE" \
-           '.apps[0].versions[0].version = $version |
-            .apps[0].versions[0].date = $date |
-            .apps[0].versions[0].size = $size' \
-           apps.json > apps.json.tmp && mv apps.json.tmp apps.json
+        # Generate clean SideStore-compatible apps.json
+        cat > apps.json << EOF
+        {
+          "name": "NotifyKit",
+          "identifier": "com.notifykit.source",
+          "apps": [
+            {
+              "name": "NotifyKit",
+              "bundleIdentifier": "com.notifykit.app",
+              "developerName": "sbruschke",
+              "subtitle": "Custom notifications via Shortcuts",
+              "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
+              "tintColor": "3962FB",
+              "versions": [
+                {
+                  "version": "${VERSION}",
+                  "date": "${DATE}",
+                  "size": ${SIZE},
+                  "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
+                  "localizedDescription": "Latest build with notification customization and Shortcuts integration."
+                }
+              ]
+            }
+          ]
+        }
+        EOF
 
         cat apps.json
 
