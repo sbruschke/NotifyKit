@@ -111,33 +111,36 @@ jobs:
 
     - name: Create or Update Release
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: latest
-        name: NotifyKit Latest
-        body: |
-          ## NotifyKit
-
-          **Version:** ${{ steps.version.outputs.version }}
-          **Build:** ${{ steps.version.outputs.build }}
-
-          ### Installation
-
-          **Option 1: Add SideStore/AltStore Source**
-          ```
-          https://raw.githubusercontent.com/sbruschke/NotifyKit/main/apps.json
-          ```
-
-          **Option 2: Direct Download**
-          Download `NotifyKit.ipa` below and sideload with AltStore/SideStore/Sideloadly.
-
-          ### Changes
-          - Latest build from main branch
-        files: build/NotifyKit.ipa
-        prerelease: false
-        make_latest: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Delete existing 'latest' release if it exists
+        gh release delete latest --yes || true
+
+        # Delete existing 'latest' tag if it exists
+        git push origin :refs/tags/latest || true
+
+        # Create new release
+        gh release create latest \
+          --title "NotifyKit Latest" \
+          --notes "## NotifyKit
+
+        **Version:** ${{ steps.version.outputs.version }}
+        **Build:** ${{ steps.version.outputs.build }}
+
+        ### Installation
+
+        **Option 1: Add SideStore/AltStore Source**
+        \`\`\`
+        https://raw.githubusercontent.com/sbruschke/NotifyKit/main/apps.json
+        \`\`\`
+
+        **Option 2: Direct Download**
+        Download \`NotifyKit.ipa\` below and sideload with AltStore/SideStore/Sideloadly.
+
+        ### Changes
+        - Latest build from main branch" \
+          build/NotifyKit.ipa
 
     - name: Commit updated apps.json
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
