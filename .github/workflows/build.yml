@@ -93,40 +93,33 @@ jobs:
         VERSION="${{ steps.version.outputs.version }}"
         SIZE="${{ steps.create_ipa.outputs.ipa_size }}"
 
-        # Generate clean SideStore-compatible apps.json
-        cat > apps.json << 'EOF'
-{
-  "name": "New Notif!",
-  "identifier": "com.newnotif.source",
-  "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
-  "headerURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/HeaderImage.png",
-  "apps": [
-    {
-      "name": "New Notif!",
-      "bundleIdentifier": "com.newnotif.app",
-      "developerName": "sbruschke",
-      "subtitle": "Custom notifications via Shortcuts",
-      "localizedDescription": "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
-      "iconURL": "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
-      "tintColor": "3962FB",
-      "versions": [
-        {
-          "version": "VERSION_PLACEHOLDER",
-          "date": "DATE_PLACEHOLDER",
-          "size": SIZE_PLACEHOLDER,
-          "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
-          "localizedDescription": "Latest build with notification customization and Shortcuts integration."
-        }
-      ]
-    }
-  ]
-}
-EOF
-
-        # Replace placeholders with actual values (macOS sed requires '' for in-place)
-        sed -i '' "s/VERSION_PLACEHOLDER/${VERSION}/g" apps.json
-        sed -i '' "s/DATE_PLACEHOLDER/${DATE}/g" apps.json
-        sed -i '' "s/SIZE_PLACEHOLDER/${SIZE}/g" apps.json
+        # Generate clean SideStore-compatible apps.json using jq
+        jq -n \
+          --arg version "$VERSION" \
+          --arg date "$DATE" \
+          --argjson size "$SIZE" \
+          '{
+            name: "New Notif!",
+            identifier: "com.newnotif.source",
+            iconURL: "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
+            headerURL: "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/HeaderImage.png",
+            apps: [{
+              name: "New Notif!",
+              bundleIdentifier: "com.newnotif.app",
+              developerName: "sbruschke",
+              subtitle: "Custom notifications via Shortcuts",
+              localizedDescription: "Send fully customizable notifications through iOS Shortcuts including title, body, sounds, images, action buttons, and scheduling.",
+              iconURL: "https://raw.githubusercontent.com/sbruschke/NotifyKit/main/AppIcon.png",
+              tintColor: "3962FB",
+              versions: [{
+                version: $version,
+                date: $date,
+                size: $size,
+                downloadURL: "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
+                localizedDescription: "Latest build with notification customization and Shortcuts integration."
+              }]
+            }]
+          }' > apps.json
 
         cat apps.json
 
