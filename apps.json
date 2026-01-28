@@ -11,9 +11,9 @@
       "tintColor": "3962FB",
       "versions": [
         {
-          "version": "1.0",
+          "version": "2026.01.28",
           "date": "2026-01-28",
-          "size": 136795,
+          "size": 136816,
           "downloadURL": "https://github.com/sbruschke/NotifyKit/releases/latest/download/NotifyKit.ipa",
           "localizedDescription": "Latest build with notification customization and Shortcuts integration."
         }
